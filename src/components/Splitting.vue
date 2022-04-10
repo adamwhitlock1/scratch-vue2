@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <span v-for="(word, wordIndex) in sentenceData" :key="wordIndex" :class="getWordClassName(wordIndex)">
 
       <span v-for="(letter, letterIndex) in word.letters"
