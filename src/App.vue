@@ -6,9 +6,8 @@
 </template>
 
 <script>
+import { gsap } from 'gsap'
 import Splitting from './components/Splitting.vue'
-
-
 
 export default {
   name: 'App',
@@ -21,6 +20,7 @@ export default {
   methods: {
     addHoverClass({ref}) {
       ref.classList.add('hover-bro')
+      gsap.fromTo(ref,{autoAlpha:1},{autoAlpha:0, duration: 0.5});
     }
   }
 }
