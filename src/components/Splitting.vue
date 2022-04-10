@@ -4,7 +4,10 @@
 
       <span v-for="(letter, letterIndex) in word.letters"
       :key="`${letter}${letterIndex}`"
-      :class="getCharacterClassName(letterIndex, word.startingNumber)">{{letter}}</span>
+      :class="getCharacterClassName(letterIndex, word.startingNumber)"
+      :ref="getRefName(letterIndex, word.startingNumber, letter)"
+      @mouseover="triggerHover(getRefName(letterIndex, word.startingNumber, letter), $event)"
+      >{{letter}}</span>
 
       <span v-if="word !== words.at(-1)" class="whitespace">&nbsp;</span>
 
@@ -37,15 +40,27 @@ export default {
     debug: {
       type: Boolean,
       default: false
+    },
+    hover: {
+      type: Function
     }
   },
   methods: {
+    getSequentialIndex(letterIndex, startingNumber) {
+      return letterIndex + startingNumber
+    },
+    getRefName(letterIndex, startingNumber, letter) {
+      return `${this.characterClassName}__${letter}__${this.getSequentialIndex(letterIndex, startingNumber)}`
+    },
     getCharacterClassName(letterIndex, startingNumber) {
-      const indexValue = this.sequential ? (letterIndex + startingNumber) : letterIndex
+      const indexValue = this.sequential ? this.getSequentialIndex(letterIndex, startingNumber) : letterIndex
       return `${this.characterClassName} ${this.characterClassName}__index-${indexValue}`
     },
     getWordClassName(wordIndex) {
       return `${this.wordClassName} ${this.wordClassName}__index-${wordIndex}`
+    },
+    triggerHover(refName, event) {
+      if ( typeof this.hover === 'function') this.hover({ref: this.$refs[refName][0], event})
     }
   },
   computed: {
@@ -65,6 +80,16 @@ export default {
           return accumulator
         }, [])
       }
+    },
+    mounted() {
+      console.log(this.$refs)
     }
 }
 </script>
+
+<style>
+.char {
+  font-size: 32px;
+  padding: 5px
+}
+</style>
